@@ -1,11 +1,14 @@
 ﻿# Python
-backend/venv/
-backend/__pycache__/
-backend/*.pyc
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
 
 # Node
-frontend/node_modules/
+node_modules/
 frontend/build/
 
-# Env
-.env
+# OS
+.DS_Store
+Thumbs.db
