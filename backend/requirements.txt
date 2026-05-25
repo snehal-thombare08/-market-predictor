@@ -1,0 +1,9 @@
+﻿fastapi
+uvicorn
+yfinance
+torch
+numpy
+pandas
+scikit-learn
+websockets
+python-multipart
