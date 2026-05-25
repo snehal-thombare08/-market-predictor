@@ -1,7 +1,7 @@
-﻿from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from data_fetcher import fetch_stock_data, prepare_features
-from model import train_model, predict_next
+from data_fetcher import fetch_stock_data
+from model import predict_price
 import json
 import asyncio
 
@@ -22,17 +22,16 @@ async def root():
 async def analyze(symbol: str):
     try:
         df = fetch_stock_data(symbol.upper())
-        X, y, scaler_min, scaler_max, prices = prepare_features(df)
-        model = train_model(X, y, epochs=30)
-        predicted = predict_next(model, X[-1], scaler_min, scaler_max)
-        current = float(prices[-1])
-        change_pct = ((predicted - current) / current) * 100
+        prices = df["Close"].values.tolist()
+        predicted = predict_price(prices)
+        current = round(float(prices[-1]), 2)
+        change_pct = round(((predicted - current) / current) * 100, 2)
         history = [{"date": str(df.index[i].date()), "price": round(float(prices[i]), 2)} for i in range(-30, 0)]
         return {
             "symbol": symbol.upper(),
-            "current_price": round(current, 2),
-            "predicted_price": round(predicted, 2),
-            "change_pct": round(change_pct, 2),
+            "current_price": current,
+            "predicted_price": predicted,
+            "change_pct": change_pct,
             "signal": "BUY" if change_pct > 0 else "SELL",
             "history": history,
         }
@@ -44,12 +43,9 @@ async def websocket_endpoint(websocket: WebSocket, symbol: str):
     await websocket.accept()
     try:
         while True:
-            df = fetch_stock_data(symbol.upper(), period="5d")
+            df = fetch_stock_data(symbol.upper())
             current = round(float(df["Close"].iloc[-1]), 2)
-            await websocket.send_text(json.dumps({
-                "symbol": symbol.upper(),
-                "price": current,
-            }))
+            await websocket.send_text(json.dumps({"symbol": symbol.upper(), "price": current}))
             await asyncio.sleep(10)
     except WebSocketDisconnect:
         pass
