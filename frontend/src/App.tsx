@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
@@ -22,7 +22,7 @@ function App() {
     setError("");
     setData(null);
     try {
-      const res = await axios.get(`http://localhost:8001/analyze/${symbol}`);
+      const res = await axios.get(`https://market-predictor-api.onrender.com/analyze/${symbol}`);
       if (res.data.error) setError(res.data.error);
       else setData(res.data);
     } catch (e) {
@@ -33,8 +33,8 @@ function App() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#0f0f1a", color: "white", fontFamily: "Arial, sans-serif", padding: "30px" }}>
-      <h1 style={{ textAlign: "center", fontSize: "2rem", color: "#00d4ff" }}>📈 Market Predictor</h1>
-      <p style={{ textAlign: "center", color: "#888" }}>LSTM Neural Network — Stock Price Prediction</p>
+      <h1 style={{ textAlign: "center", fontSize: "2rem", color: "#00d4ff" }}>ðŸ“ˆ Market Predictor</h1>
+      <p style={{ textAlign: "center", color: "#888" }}>LSTM Neural Network â€” Stock Price Prediction</p>
 
       <div style={{ display: "flex", justifyContent: "center", gap: "10px", margin: "30px 0" }}>
         <input
@@ -48,7 +48,7 @@ function App() {
           disabled={loading}
           style={{ padding: "12px 30px", borderRadius: "8px", background: loading ? "#333" : "#00d4ff", color: "#000", fontWeight: "bold", border: "none", cursor: "pointer", fontSize: "1rem" }}
         >
-          {loading ? "Analyzing..." : "Analyze 🚀"}
+          {loading ? "Analyzing..." : "Analyze ðŸš€"}
         </button>
       </div>
 
@@ -56,7 +56,7 @@ function App() {
 
       {loading && (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
-          <p style={{ color: "#00d4ff", fontSize: "1.2rem" }}>🧠 LSTM Model Training...</p>
+          <p style={{ color: "#00d4ff", fontSize: "1.2rem" }}>ðŸ§  LSTM Model Training...</p>
           <p style={{ color: "#888" }}>1-2 minutes lagel</p>
         </div>
       )}
@@ -93,11 +93,11 @@ function App() {
 
           <div style={{ background: "#1a1a2e", borderRadius: "12px", padding: "20px", marginTop: "15px", border: `1px solid ${data.signal === "BUY" ? "#00ff8833" : "#ff444433"}` }}>
             <h3 style={{ color: data.signal === "BUY" ? "#00ff88" : "#ff4444", margin: "0 0 10px 0" }}>
-              {data.signal === "BUY" ? "✅ BUY Signal" : "🔴 SELL Signal"}
+              {data.signal === "BUY" ? "âœ… BUY Signal" : "ðŸ”´ SELL Signal"}
             </h3>
             <p style={{ color: "#888", margin: 0 }}>
               LSTM model predicts {data.change_pct > 0 ? "+" : ""}{data.change_pct}% change.
-              Current: ${data.current_price} → Predicted: ${data.predicted_price}
+              Current: ${data.current_price} â†’ Predicted: ${data.predicted_price}
             </p>
           </div>
         </div>
@@ -107,3 +107,4 @@ function App() {
 }
 
 export default App;
+
