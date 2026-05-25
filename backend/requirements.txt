@@ -6,4 +6,3 @@ pandas
 scikit-learn
 websockets
 python-multipart
-torch --index-url https://download.pytorch.org/whl/cpu
